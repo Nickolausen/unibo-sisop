@@ -2,9 +2,14 @@
 
 RES=""
 
-for IDX in {1..$#..2}
+for ((IDX=1;IDX<=$#;IDX=IDX+2))
 do
-	RES="${RES}${!IDX}"
+	RES+=" ${!IDX}"
+done
+
+for ((IDX=2;IDX<=$#;IDX=IDX+2))
+do
+	RES+=" ${!IDX}"
 done
 
 echo "${RES}"
