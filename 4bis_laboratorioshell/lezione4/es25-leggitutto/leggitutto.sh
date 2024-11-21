@@ -7,7 +7,7 @@ FILE_URL="http://www.cs.unibo.it/~ghini/didattica/sistemioperativi/ESERCIZI/miof
 IDX=1
 
 # Scarico il contenuto del file, stampandolo su stdout;
-# la stampa viene intercettada da read, che ne legge riga per riga;
+# la stampa viene intercettata da read, che ne legge riga per riga;
 # se riesco a leggere la riga ($? == 0) oppure quanto letto è diverso da una stringa vuota,
 # allora stampo la riga letta
 
