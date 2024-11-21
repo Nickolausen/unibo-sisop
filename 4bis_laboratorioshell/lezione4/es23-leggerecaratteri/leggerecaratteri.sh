@@ -15,11 +15,12 @@ exec 3< $FILE_PATH
 # Se l'operazione ha avuto successo (exit code: 0), allora procedo
 if (( $? == 0)); then
 	IDX=1
-	while read -u 3 P1 P2 P3 P4;
+	while read -u 3 -n 1 CHAR;
 	do
-		echo "$P3"
+		echo "[Letto char #${IDX}] $CHAR"
 		IDX=$(( $IDX+1 ))
-	done	
+	done
+	echo "Caratteri letti: $IDX"	
 fi
 
 # Chiudo il file descriptor precedentemente aperto
