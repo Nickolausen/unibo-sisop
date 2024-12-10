@@ -10,7 +10,7 @@ if [[ $# -lt 1 || $# -gt 9 ]] ; then
 	exit 1
 fi
 
-for((IDX=1;IDX<=$#;IDX=IDX+1)); do
+for ((IDX=1;IDX<=$#;IDX=IDX+1)); do
 	if ((IDX%2==0)); then
 #		echo "pari"
 		cat ${!IDX} | wc -l
