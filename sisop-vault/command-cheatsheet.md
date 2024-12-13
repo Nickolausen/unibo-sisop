@@ -1,7 +1,7 @@
 # Bash Guide & Command Cheatsheet — A dummy-to-dummy summary
 
 > * ✍🏼 **Nicholas Magi**, `nicholas.magi@studio.unibo.it`
-> * Corso di Sistemi Operativi @ CdL in Ingegneria e Scienze Informatiche, Università di Bologna — Campus di Cesena.
+> * Corso di **Sistemi Operativi** @ CdL in Ingegneria e Scienze Informatiche, Università di Bologna — Campus di Cesena.
 > * Riassunto e schematizzazione delle dispense del prof. **Vittorio Ghini**.
 ## Nozioni per uso del terminale: *Metacaratteri*
 
@@ -181,9 +181,9 @@ echo PIPPO$((3+2))
 ```
 
 Le espressioni aritmetiche possono contenere:
-- operatori aritmetici (+, -, \*, /, %)
-- assegnamenti
-- parentesi tonde per modificare la precedenza dei calcoli
+- ✅ operatori aritmetici (+, -, \*, /, %)
+- ✅ assegnamenti
+- ✅ parentesi tonde per modificare la precedenza dei calcoli
 
 > [!info]
 > Le espressioni aritmetiche possono essere usate anche come condizione di `while` e `if`. 
@@ -206,10 +206,10 @@ OR: `||`, `-o`
 
 > [!warning]
 In nessuna versione è supportato:
-> - **WORD SPLITTING**
-> - **BRACE EXPANSION**
-> - **PATHNAME EXPANSION**
-> - **INSERIMENTO COMANDI** (ad eccezione della *command subsitution* con \`\` per generare **operandi**, non operatori!)
+> - ❌ **WORD SPLITTING**
+> - ❌ **BRACE EXPANSION**
+> - ❌ **PATHNAME EXPANSION**
+> - ❌ **INSERIMENTO COMANDI** (ad eccezione della *command subsitution* con \`\` per generare **operandi**, non operatori!)
 
 1. Con doppie parentesi quadre **\[\[ *`condiz`* \]\]** — *enhanced brackets* 
 - ✅ SI a tutte le versioni di operatori logici
@@ -480,6 +480,10 @@ Ricordiamo che in `/proc/` esiste una subdirectory per ogni processo in esecuzio
 
 #### `read`
 
+```bash
+read RIGA
+```
+
 Di default, legge il contenuto in `stdin` e lo memorizza in `RIGA`; se vengono specificate più variabili, il contenuto letto viene spezzato in più parole - ciascuna "incastrata" nella variabile corrispondente (*prima parola $\rightarrow$ prima variabile, seconda parola $\rightarrow$ seconda variabile ecc...*). Nel caso in cui vengono dichiarate meno variabili rispetto alle parole da leggere, **l'ultima variabile contiene il testo mancante**
 
 | OPZIONI UTILI |                                                                                     |
@@ -509,6 +513,7 @@ Nell'esempio, ridireziona qualsiasi messaggio stampato su `stdout` all'interno d
 | Read&Write    | `exec n<> ./myfile.txt`                                                                                  | `exec {MYVAR}<> ./myfile.txt`          |
 
 >[!info] Ricorda!
+> Bash assegna ad alcuni numeri dei file descriptor di **default**:
 >- `0` $\rightarrow$ `stdin`
 >- `1` $\rightarrow$ `stdout`
 >- `2` $\rightarrow$ `stderr`
