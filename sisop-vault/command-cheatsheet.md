@@ -1,6 +1,7 @@
 # Bash Guide & Command Cheatsheet — A dummy-to-dummy summary
 
-> * ✍🏼 **Nicholas Magi**, `nicholas.magi@studio.unibo.it`
+> * ✍🏼 **Nicholas Magi**, `nicholas.magi@studio.unibo.it`, 
+> 	* *con il contributo di **Gioele Foschi** - `gioele.foschi@studio.unibo.it`*
 > * Corso di **Sistemi Operativi** @ CdL in Ingegneria e Scienze Informatiche, Università di Bologna — Campus di Cesena.
 > * Riassunto e schematizzazione delle dispense del prof. **Vittorio Ghini**.
 > * Scritto su: **[Obsidian](https://obsidian.md/)** — consigliato il suo utilizzo poiché alcuni contenuti non sono direttamente fruibili da altri interpreti di Markdown.
@@ -93,6 +94,66 @@ Operatore **`!`**:
 - se `IDX=2`, `${!IDX} == $2`;
 - se `IDX=3`, `${!IDX} == $3`;
 - *ecc...*
+
+### Manipolare il contenuto della variabile
+
+>[!warning]
+>Le seguenti espansioni ***non vanno a modificare la variabile***, ma mostrano solamente la modifica apportata.
+
+Supponiamo di avere la variabile `VAR="[13] qualcosa con [ 0 ] fine"`
+#### Rimozione di *suffissi*
+
+```sh
+${VAR%%pattern}
+```
+
+- Rimuovo il ***più lungo*** *suffisso* che fa match con la stringa originale
+-  `{bash} echo ${VAR%%]*}` stampa in output: `[13`
+
+```sh
+${VAR%pattern}
+```
+
+- Rimuovo il ***più corto*** *suffisso* che fa match con la stringa originale
+- `{bash} echo ${VAR%]*}` stampa in output: `[13] qualcosa con [ 0 `
+
+#### Rimozione di *prefissi*
+
+```sh
+${VAR##pattern}
+```
+
+- Rimuovo il ***più lungo*** *prefisso* che fa match con la stringa originale
+-  `{bash} echo ${VAR##[*}` stampa in output: `0 ] fine`
+
+```sh
+${VAR#pattern}
+```
+
+- Rimuovo il ***più corto*** *prefisso* che fa match con la stringa originale
+- `{bash} echo ${VAR#[*}` stampa in output: `13] qualcosa con [ 0 ] fine`
+
+#### Sostituzione
+
+```sh
+${VAR/pattern/string}
+```
+
+- Cerca nel contenuto di `VAR` la *sottostringa più lunga* che fa match con il `pattern` fornito (anche con [[Wildcards]]) e lo *sostituisce* con `string`
+
+#### Substring
+
+```sh
+${VAR:offset:length}
+```
+
+- Mostra la ***sottostringa*** lunga `length` che parte dal carattere numero `offset` del contenuto di `VAR`
+
+```sh
+${VAR:offset}
+```
+
+- Mostra la ***sottostringa*** che parte dal carattere numero `offset` del contenuto di `VAR`
 
 ---
 ## Nozioni per uso del terminale: *Permessi di file e directory*
@@ -734,55 +795,3 @@ sed 's/[a-zA-Z0-9]//g
 | ---------- | ------------------------------------------------------------------------------ |
 | `-r \| -E` | Interpreta la `regular expression` come regular expression moderna (o estesa). |
 
-### Modifiche del Contenuto della variabile
->Le seguenti espansioni ***non vanno a modificare la variabile***, ma mostrano solamente la modifica apportata
-
-Supponiamo di avere la variabile `VAR="[13] qualcosa con [ 0 ] fine"`
-#### Rimozione di Suffissi
-```sh
-${VAR%%pattern}
-```
-
-- Rimuovo il ***più lungo*** *suffisso* che fa match con la stringa originale
--  `{bash} echo ${VAR%%]*}` stampa in output: `[13`
-```sh
-${VAR%pattern}
-```
-
-- Rimuovo il ***più corto*** *suffisso* che fa match con la stringa originale
-- `{bash} echo ${VAR%]*}` stampa in output: `[13] qualcosa con [ 0 `
-
-#### Rimozione di Prefissi
-```sh
-${VAR##pattern}
-```
-
-- Rimuovo il ***più lungo*** *prefisso* che fa match con la stringa originale
--  `{bash} echo ${VAR##[*}` stampa in output: `0 ] fine`
-
-```sh
-${VAR#pattern}
-```
-
-- Rimuovo il ***più corto*** *prefisso* che fa match con la stringa originale
-- `{bash} echo ${VAR#[*}` stampa in output: `13] qualcosa con [ 0 ] fine`
-
-#### Sostituzione
-```sh
-${VAR/pattern/string}
-```
-
-- Cerca nel contenuto di `VAR` la *sottostringa più lunga* che fa match con il pattern fornito (anche con [[Wildcards]]) e lo *sostituisce* con `string`
-
-#### Substring
-```sh
-${VAR:offset:length}
-```
-
-- Mostra la ***sottostringa*** lunga `length` che parte dal carattere numero `offset` del contenuto di `VAR`
-
-```sh
-${VAR:offset}
-```
-
-- Mostra la ***sottostringa*** che parte dal carattere numero `offset` del contenuto di `VAR`
