@@ -734,3 +734,55 @@ sed 's/[a-zA-Z0-9]//g
 | ---------- | ------------------------------------------------------------------------------ |
 | `-r \| -E` | Interpreta la `regular expression` come regular expression moderna (o estesa). |
 
+### Modifiche del Contenuto della variabile
+>Le seguenti espansioni ***non vanno a modificare la variabile***, ma mostrano solamente la modifica apportata
+
+Supponiamo di avere la variabile `VAR="[13] qualcosa con [ 0 ] fine"`
+#### Rimozione di Suffissi
+```sh
+${VAR%%pattern}
+```
+
+- Rimuovo il ***più lungo*** *suffisso* che fa match con la stringa originale
+-  `{bash} echo ${VAR%%]*}` stampa in output: `[13`
+```sh
+${VAR%pattern}
+```
+
+- Rimuovo il ***più corto*** *suffisso* che fa match con la stringa originale
+- `{bash} echo ${VAR%]*}` stampa in output: `[13] qualcosa con [ 0 `
+
+#### Rimozione di Prefissi
+```sh
+${VAR##pattern}
+```
+
+- Rimuovo il ***più lungo*** *prefisso* che fa match con la stringa originale
+-  `{bash} echo ${VAR##[*}` stampa in output: `0 ] fine`
+
+```sh
+${VAR#pattern}
+```
+
+- Rimuovo il ***più corto*** *prefisso* che fa match con la stringa originale
+- `{bash} echo ${VAR#[*}` stampa in output: `13] qualcosa con [ 0 ] fine`
+
+#### Sostituzione
+```sh
+${VAR/pattern/string}
+```
+
+- Cerca nel contenuto di `VAR` la *sottostringa più lunga* che fa match con il pattern fornito (anche con [[Wildcards]]) e lo *sostituisce* con `string`
+
+#### Substring
+```sh
+${VAR:offset:length}
+```
+
+- Mostra la ***sottostringa*** lunga `length` che parte dal carattere numero `offset` del contenuto di `VAR`
+
+```sh
+${VAR:offset}
+```
+
+- Mostra la ***sottostringa*** che parte dal carattere numero `offset` del contenuto di `VAR`
