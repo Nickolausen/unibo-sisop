@@ -3,6 +3,7 @@
 > * ✍🏼 **Nicholas Magi**, `nicholas.magi@studio.unibo.it`
 > * Corso di **Sistemi Operativi** @ CdL in Ingegneria e Scienze Informatiche, Università di Bologna — Campus di Cesena.
 > * Riassunto e schematizzazione delle dispense del prof. **Vittorio Ghini**.
+> * Scritto su: **[Obsidian](https://obsidian.md/)** — consigliato il suo utilizzo poiché alcuni contenuti non sono direttamente fruibili da altri interpreti di Markdown.
 
 ```table-of-contents
 title: Indice dei contenuti 
