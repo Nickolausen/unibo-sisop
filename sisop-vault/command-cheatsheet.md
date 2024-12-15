@@ -48,6 +48,7 @@ In ordine di effettuazione
 | **7) word spitting**                    |                         |
 | **8) pathname expansion**               | `* ? [...]`             |
 | **9) quote removal**                    | quoting                 |
+
 <small>1 — LTR: <span style="font-style:italic">Left To Right</span></small>
 
 ---
@@ -83,6 +84,7 @@ Per visualizzare il PID di un processo si fa riferimento alla variabile **`$$`**
 
 >[!warning] Attenzione alla portabilità
 >`$BASHPID` è definita solo in bash e solo per le versioni di bash > 4.0!
+
 ### Riferimenti indiretti a variabili
 
 Operatore **`!`**: 
