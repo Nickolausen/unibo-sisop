@@ -223,14 +223,14 @@ Le espressioni aritmetiche possono contenere:
 
 ### Valori di verità
 
-`true`:  "exit status di un `command`" $= 0$ 
-`false`: "exit status di un `command`" $\neq 0$ 
+* `true`:  "exit status di un `command`" $= 0$ 
+* `false`: "exit status di un `command`" $\neq 0$ 
 
 ### Operatori logici
 
-NOT: `!`
-AND: `&&`, `-a`
-OR: `||`, `-o`
+**NOT**: `!`
+**AND**: `&&`, `-a`
+**OR**: `||`, `-o`
 
 ### Versioni
 
