@@ -5,16 +5,72 @@
 > * Corso di **Sistemi Operativi** @ CdL in Ingegneria e Scienze Informatiche, Università di Bologna — Campus di Cesena.
 > * Riassunto e schematizzazione delle dispense del prof. **Vittorio Ghini**.
 > * Scritto su: **[Obsidian](https://obsidian.md/)** — consigliato il suo utilizzo poiché alcuni contenuti non sono direttamente fruibili da altri interpreti di Markdown.
+> * Link utile: https://www.docstomarkdown.pro/markdown-table-of-contents-generator-free/ — *generatore di indice dei contenuti*.
 
-```table-of-contents
-title: Indice dei contenuti 
-style: nestedOrderedList # TOC style (nestedList|nestedOrderedList|inlineFirstLevel)
-minLevel: 0 # Include headings from the specified level
-maxLevel: 0 # Include headings up to the specified level
-includeLinks: true # Make headings clickable
-hideWhenEmpty: false # Hide TOC if no headings are found
-debugInConsole: false # Print debug info in Obsidian console
-```
+## Indice dei contenuti
+
+- [Bash Guide & Command Cheatsheet — A dummy-to-dummy summary](#bash-guide-&-command-cheatsheet-—-a-dummy-to-dummy-summary)
+  - [Nozioni per uso del terminale: *Metacaratteri*](#nozioni-per-uso-del-terminale:-*metacaratteri*)
+  - [Nozioni per uso del terminale: *Espansioni*](#nozioni-per-uso-del-terminale:-*espansioni*)
+  - [Nozioni per uso del terminale: *Variabili*](#nozioni-per-uso-del-terminale:-*variabili*)
+    - [Variabili note: `PATH`](#variabili-note:-`path`)
+    - [Variabili note: `$BASHPID` e `$$`](#variabili-note:-`$bashpid`-e-`$$`)
+    - [Riferimenti indiretti a variabili](#riferimenti-indiretti-a-variabili)
+    - [Manipolare il contenuto della variabile](#manipolare-il-contenuto-della-variabile)
+      - [Lunghezza del contenuto di una variabile](#lunghezza-del-contenuto-di-una-variabile)
+      - [Rimozione di *suffissi*](#rimozione-di-*suffissi*)
+      - [Rimozione di *prefissi*](#rimozione-di-*prefissi*)
+      - [Sostituzione](#sostituzione)
+        - [Variazioni di comportamento: sostituzione TOTALE](#variazioni-di-comportamento:-sostituzione-totale)
+        - [Variazioni di comportamento: sostituzione all'INIZIO](#variazioni-di-comportamento:-sostituzione-all'inizio)
+        - [Variazioni di comportamento: sostituzione alla FINE](#variazioni-di-comportamento:-sostituzione-alla-fine)
+      - [Substring](#substring)
+      - [Espansione di **nomi di variabili** corrispondenti ad un prefisso](#espansione-di-**nomi-di-variabili**-corrispondenti-ad-un-prefisso)
+  - [Nozioni per uso del terminale: *Permessi di file e directory*](#nozioni-per-uso-del-terminale:-*permessi-di-file-e-directory*)
+  - [Nozioni per uso del terminale: *Wildcards*](#nozioni-per-uso-del-terminale:-*wildcards*)
+    - [Wildcard *elenco*](#wildcard-*elenco*)
+  - [Nozioni per uso del terminale: *Parameter Expansion*](#nozioni-per-uso-del-terminale:-*parameter-expansion*)
+  - [Nozioni per uso del terminale: *Valutazione Aritmetica*](#nozioni-per-uso-del-terminale:-*valutazione-aritmetica*)
+    - [Nozioni per uso terminale: *Espressioni condizionali*](#nozioni-per-uso-terminale:-*espressioni-condizionali*)
+    - [Valori di verità](#valori-di-verità)
+    - [Operatori logici](#operatori-logici)
+    - [Versioni](#versioni)
+    - [Operatori utili](#operatori-utili)
+      - [Su FILES](#su-files)
+      - [Su STRINGHE](#su-stringhe)
+  - [Nozioni per uso del terminale: *Liste di comandi*](#nozioni-per-uso-del-terminale:-*liste-di-comandi*)
+  - [Nozioni per uso del terminale: *Compound Commands*](#nozioni-per-uso-del-terminale:-*compound-commands*)
+    - [Cicli — costrutto iterazione](#cicli-—-costrutto-iterazione)
+    - [If — costrutto selezione](#if-—-costrutto-selezione)
+  - [Nozioni per uso del terminale: *Command substitution*](#nozioni-per-uso-del-terminale:-*command-substitution*)
+  - [Nozioni per uso del terminale: *Ridirezionamenti di Stream I/O*](#nozioni-per-uso-del-terminale:-*ridirezionamenti-di-stream-i/o*)
+  - [Nozioni per uso del terminale: *Raggruppamento di comandi*](#nozioni-per-uso-del-terminale:-*raggruppamento-di-comandi*)
+  - [Nozioni per uso del terminale: *Processi*](#nozioni-per-uso-del-terminale:-*processi*)
+    - [Processi in *foreground*](#processi-in-*foreground*)
+    - [Processi in *background*](#processi-in-*background*)
+    - [Jobs](#jobs)
+    - [Job control](#job-control)
+    - [Processi Zombie & Orfani](#processi-zombie-&-orfani)
+  - [Nozioni per uso del terminale: *Precedenza degli operatori*](#nozioni-per-uso-del-terminale:-*precedenza-degli-operatori*)
+    - [Terminatori di una sequenza di comandi](#terminatori-di-una-sequenza-di-comandi)
+    - ["Concatenatori" di una sequenza di comandi](#"concatenatori"-di-una-sequenza-di-comandi)
+    - [Ordine](#ordine)
+  - [Cheatsheet comandi](#cheatsheet-comandi)
+    - [Generics](#generics)
+    - [Lettura & gestione file descriptor](#lettura-&-gestione-file-descriptor)
+      - [Visualizzare i file descriptor associati ad un processo](#visualizzare-i-file-descriptor-associati-ad-un-processo)
+      - [`read`](#`read`)
+      - [`exec`](#`exec`)
+      - [Manipolazione di stringhe & informazioni testuali](#manipolazione-di-stringhe-&-informazioni-testuali)
+        - [`head`](#`head`)
+        - [`tail`](#`tail`)
+        - [`tee`](#`tee`)
+        - [`cut`](#`cut`)
+        - [`grep`](#`grep`)
+        - [`sed` — **S**tream **Ed**itor](#`sed`-—-**s**tream-**ed**itor)
+      - [Gestione processi](#gestione-processi)
+        - [`disown`](#`disown`)
+        - [`nohup`](#`nohup`)
 
 ## Nozioni per uso del terminale: *Metacaratteri*
 
@@ -64,6 +120,7 @@ In ordine di effettuazione
 | `echo $MYVAR`    | stampo il valore di `MYVAR`, quindi `PAROLA`.                                                                                 |
 | `echo $MYVARx`   | la shell non è in grado di trovare una variabile `MYVARx`, quindi stampa **stringa vuota**.                                   |
 | `echo $MYVAR x`  | la shell individua correttamente la variabile `MYVAR`, quindi visualizzerà `PAROLA x`.                                        |
+
 ### Variabili note: `PATH`
 
 `PATH` è una variabile d'ambiente che contiene i percorsi assoluti di alcuni eseguibili utilizzati molto spesso. 
