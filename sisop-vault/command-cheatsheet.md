@@ -121,20 +121,20 @@ Dove:
 ---
 ## Nozioni per uso del terminale: *Wildcards*
 
-\* -> sostituito con una **qualunque stringa di caratteri**;
-? -> sostituito con un **qualunque carattere**;
-\[*elenco*] -> sostituito con un qualunque carattere specificato in *elenco*;
+* `*` -> sostituito con una **qualunque stringa di caratteri**;
+* `?` -> sostituito con un **qualunque carattere**;
+* `[`*`elenco`*`]` -> sostituito con un qualunque carattere specificato in *elenco*;
 
 ### \[*elenco*]
 
 | WILDCARD      | SOSTITUZIONE                                                                  |
 | ------------- | ----------------------------------------------------------------------------- |
-| \[\[:digit:]] | una sola cifra, 0-9                                                           |
-| \[\[:upper:]] | un solo carattere **MAIUSCOLO**                                               |
-| \[\[:lower:]] | un solo carattere **minuscolo**                                               |
-| \[c-f\]       | un solo carattere compreso tra 'c' ed 'f'; *in questo caso, {c, d, e, f}*     |
-| \[1-7]        | un solo carattere compreso tra 1 e 7; *in questo caso, {1, 2, 3, 4, 5, 6, 7}* |
-| \[abk\]       | un solo carattere tra 'a', 'b' o 'k'                                          |
+| `[[:digit:]]` | una sola cifra, 0-9                                                           |
+| `[[:upper:]]` | un solo carattere **MAIUSCOLO**                                               |
+| `[[:lower:]]` | un solo carattere **minuscolo**                                               |
+| `[c-f]`       | un solo carattere compreso tra 'c' ed 'f'; *in questo caso, {c, d, e, f}*     |
+| `[1-7]`        | un solo carattere compreso tra 1 e 7; *in questo caso, {1, 2, 3, 4, 5, 6, 7}* |
+| `[abk]`       | un solo carattere tra 'a', 'b' o 'k'                                          |
 
 ---
 ## Nozioni per uso del terminale: *Parameter Expansion*
@@ -146,11 +146,11 @@ Siamo sulla bash, chiamiamo il nostro script passandogli qualche argomento:
 ```
 
 **Dentro a `faiqualcosa.sh` possiamo accedere a diverse informazioni identificate come:**
-* $#: numero di argomenti ricevuti (*nell'esempio, **3***);
-* $0: nome del processo in esecuzione (*nell'esempio, **`./faiqualcosa.sh`***)
-* $1 - primo argomento, $2 - secondo argomento... (*nell'esempio, $1 = `argo1`, $2 = `mamma2`, $3 = `soreta4`*)
-* $\*: tutti gli argomenti ricevuti, concatenati e separati da spazi bianchi (*nell'esempio, `argo1 mamma2 soreta4`*)
-* $@: come per $\*, ma gli argomenti sono quotati separatamente (*nell'esempio, `"argo1" "mamma2" "soreta4"`*)
+* `$#`: numero di argomenti ricevuti (*nell'esempio, **3***);
+* `$0`: nome del processo in esecuzione (*nell'esempio, **`./faiqualcosa.sh`***)
+* `$1` - primo argomento, `$2` - secondo argomento... (*nell'esempio, $1 = `argo1`, $2 = `mamma2`, $3 = `soreta4`*)
+* `$*`: tutti gli argomenti ricevuti, concatenati e separati da spazi bianchi (*nell'esempio, `argo1 mamma2 soreta4`*)
+* `$@`: come per `$*`, ma gli argomenti sono quotati separatamente (*nell'esempio, `"argo1" "mamma2" "soreta4"`*)
 
 In particolare:
 
