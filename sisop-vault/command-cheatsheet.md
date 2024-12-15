@@ -82,10 +82,26 @@ Per visualizzare il PID di un processo si fa riferimento alla variabile **`$$`**
 ```
 
 >[!warning] Eccezione di comportamento!
-> `$$` si riferisce al PID della shell padre di un processo! Se voglio vedere il PID di una sub-shell lanciata da un gruppo di comandi, devo utilizzare la variabile `$BASHPID`! 
+> `$$` si riferisce al PID della shell padre di un processo. Se voglio vedere il PID di una sub-shell lanciata da un gruppo di comandi, devo utilizzare la variabile `$BASHPID`! 
 
 >[!warning] Attenzione alla portabilità
 >`$BASHPID` è definita solo in bash e solo per le versioni di bash > 4.0!
+
+```bash
+echo "PID fuori $$" ; ( echo "PID dentro $$" ; echo -n "" )
+
+# Output SENZA USO DI $BASHPID
+PID fuori 1760
+PID dentro 1760
+```
+
+```bash
+echo "PID fuori $$" ; ( echo "PID dentro $BASHPID" ; echo -n "" )
+
+# Output CON USO DI $BASHPID
+PID fuori 1760
+PID dentro 2042
+```
 
 ### Riferimenti indiretti a variabili
 
@@ -101,21 +117,30 @@ Operatore **`!`**:
 >Le seguenti espansioni ***non vanno a modificare la variabile***, ma mostrano solamente la modifica apportata.
 
 Supponiamo di avere la variabile `VAR="[13] qualcosa con [ 0 ] fine"`
+
+#### Lunghezza del contenuto di una variabile
+
+```bash
+${#VAR}
+```
+
+- Ottengo la lunghezza della stringa memorizzata in `VAR`;
+- `echo ${#VAR}` stampa in output: `28`
 #### Rimozione di *suffissi*
 
-```sh
+```bash
 ${VAR%%pattern}
 ```
 
 - Rimuovo il ***più lungo*** *suffisso* che fa match con la stringa originale
--  `{bash} echo ${VAR%%]*}` stampa in output: `[13`
+-  `echo ${VAR%%]*}` stampa in output: `[13`
 
 ```sh
 ${VAR%pattern}
 ```
 
 - Rimuovo il ***più corto*** *suffisso* che fa match con la stringa originale
-- `{bash} echo ${VAR%]*}` stampa in output: `[13] qualcosa con [ 0 `
+- `echo ${VAR%]*}` stampa in output: `[13] qualcosa con [ 0 `
 
 #### Rimozione di *prefissi*
 
@@ -124,14 +149,14 @@ ${VAR##pattern}
 ```
 
 - Rimuovo il ***più lungo*** *prefisso* che fa match con la stringa originale
--  `{bash} echo ${VAR##[*}` stampa in output: `0 ] fine`
+-  `echo ${VAR##[*}` stampa in output: `0 ] fine`
 
 ```sh
 ${VAR#pattern}
 ```
 
 - Rimuovo il ***più corto*** *prefisso* che fa match con la stringa originale
-- `{bash} echo ${VAR#[*}` stampa in output: `13] qualcosa con [ 0 ] fine`
+- `echo ${VAR#[*}` stampa in output: `13] qualcosa con [ 0 ] fine`
 
 #### Sostituzione
 
@@ -140,6 +165,30 @@ ${VAR/pattern/string}
 ```
 
 - Cerca nel contenuto di `VAR` la *sottostringa più lunga* che fa match con il `pattern` fornito (anche con [[Wildcards]]) e lo *sostituisce* con `string`
+
+##### Variazioni di comportamento: sostituzione TOTALE
+
+```bash
+${VAR//pattern/string}
+```
+
+Come per una normale sostituzione, ma questa viene effettuata su **tutte le occorrenze di `pattern`**, non solo sulla prima trovata.
+
+##### Variazioni di comportamento: sostituzione all'INIZIO
+
+```bash
+${VAR/#pattern/string}
+```
+
+Come per una normale sostituzione, ma questa viene effettuata **solo se `pattern` si trova all'inizio della variabile**.
+
+##### Variazioni di comportamento: sostituzione alla FINE
+
+```bash
+${VAR/%pattern/string}
+```
+
+Come per una normale sostituzione, ma questa viene effettuata **solo se `pattern` si trova alla fine della variabile**.
 
 #### Substring
 
@@ -154,6 +203,36 @@ ${VAR:offset}
 ```
 
 - Mostra la ***sottostringa*** che parte dal carattere numero `offset` del contenuto di `VAR`
+
+#### Espansione di **nomi di variabili** corrispondenti ad un prefisso 
+
+```bash
+${!VarNamePrefix*}
+```
+
+Restituisce un elenco con tutti i nomi delle variabili il cui nome inizia con il prefisso specificato `VarNamePrefix`.
+
+*Esempio:* data l'esistenza delle seguenti variabili
+
+```bash
+BASH=/bin/bash
+BASH_ALIASES=()
+BASH_ARGC=()
+BASH_ARGV=()
+BASH_CMDS=()
+BASH_LINENO=()
+BASH_SOURCE=()
+BASH_VERSION='4.1.17(9)-release'
+CYG_SYS_BASHRC=1
+```
+
+Per vedere le variabili il cui nome inizia con `BASH_AR` devo digitare il comando:
+
+```bash
+echo ${!BASH_AR*}
+
+# Output: BASH_ARGC BASH_ARGV
+```
 
 ---
 ## Nozioni per uso del terminale: *Permessi di file e directory*
@@ -342,7 +421,7 @@ In nessuna versione è supportato:
 | `string1 < string2`, `string1 -lt string2`                       | True if *`string1` sorts before `string2` lexicographically.* |
 | `string1 > string2`, `string1 -gt string2`                       | True if *`string1` sorts after `string2` lexicographically*.  
 >[!info]
->Esistono anche le varianti `le` (***l**ess or **e**qual to*) e `ge` (***g**reater or **e**qual to*).
+>Esistono anche le varianti `-le` (***l**ess or **e**qual to*) e `-ge` (***g**reater or **e**qual to*).
 
 
 ---
@@ -541,6 +620,61 @@ Esempio di sequenza di comandi:
 
 > [!warning] 
 > Durante l'esecuzione, **`stdin`, `stdout` e `stderr` dei singoli comandi vengono concatenati.**
+
+---
+## Nozioni per uso del terminale: *Processi*
+
+### Processi in *foreground*
+
+- Processi che controllano il terminale da cui sono stati lanciati: ne condividono `stdin`, `stdout` e `stderr`; non permettono l'esecuzione di altri programmi.
+- In ogni istante di tempo al più **1 processo** può essere in *foreground*.
+### Processi in *background*
+
+- Processi eseguiti in parallelo rispetto all'esecuzione della bash; detengono una copia dei *file descriptor* associati alla shell che li ha lanciati, quindi condividono `stdin`/`stderr`/`stdout`; questo comporta che la chiusura del terminale causi a sua volta la terminazione di tutti i processi — affinché questi possano continuare a prescindere dalla vita del terminale, occorre "sganciarli" da esso.
+### Jobs
+
+- Processi in background o sospesi solo figli di quella shell.
+### Job control
+
+- Spostamento di un processo `background` $\leftrightarrow$ `foreground`
+
+### Processi Zombie & Orfani
+
+Si parla di queste 2 categorie di processi quando viene chiamato il comando `wait` *(vedi sotto, in Command Cheatsheet)*.
+
+```bash
+wait $PROC_PID
+```
+
+Ricordiamo che ogni processo è composto da un PID (identificativo del processo) + un PCB (*Process Control Block*, insieme di attributi del processo)
+
+1. Se la shell padre termina senza aver effettuato una chiamata `wait $PROC_PID`, allora il processo figlio viene definito **processo orfano**. Tutti i processi orfani vengono adottati dal processo **init**, colui che detiene il PID = 1, che provvederà a chiamare `wait` per i nuovi arrivati — così da far rilasciare il PCB.
+
+2. Se la shell figlia termina prima dell'esecuzione della shell padre, allora il figlio viene detto **processo zombie**. Il processo è terminato, ma il suo PCB è ancora presente nelle tabelle del sistema operativo. Questo viene eliminato solo quando viene effettuata una chiamata dal padre a `wait $PROC_PID`.
+
+---
+## Nozioni per uso del terminale: *Precedenza degli operatori*
+
+### Terminatori di una sequenza di comandi
+
+```bash
+; & newline # andata a capo
+```
+
+### "Concatenatori" di una sequenza di comandi
+
+```bash
+&& || ; & |
+```
+### Ordine
+
+> [!warning]
+> Ordine per **precedenza decrescente**
+
+1. `{ ... ; }`, `( ... )` — con le parentesi graffe **è obbligatorio il ; finale!**
+2. `|`
+3. `&&`, `||`
+4. `&`, `;`
 
 ---
 ## Cheatsheet comandi
@@ -794,4 +928,47 @@ sed 's/[a-zA-Z0-9]//g
 | ARGS UTILI | DESCRIZIONE                                                                    |
 | ---------- | ------------------------------------------------------------------------------ |
 | `-r \| -E` | Interpreta la `regular expression` come regular expression moderna (o estesa). |
+
+#### Gestione processi
+
+| ESEMPIO               | SIGNIFICATO                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `./myscript &`        | Esegue `myscript.sh` **in background**. All'interno della variabile `$!` è memorizzato il suo PID. **Il carattere `&` rappresenta un separatore tra comandi — è necessario quindi omettere il ";"**                                                                                                                                                                                                                                                                                                                                                                                              |
+| `^Z` (*Ctrl-Z*)       | **Sospende** un processo in *foreground*.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `^C` (*Ctrl-C*)       | **Termina** un processo in *foreground*.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `bg`                  | Riprende l'esecuzione in background di un processo sospeso.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `fg %n`               | Porta in foreground un processo sospeso — `%n`: *indice del job di riferimento.* *(vedi `jobs`)*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `kill 6152`           | Elimina il processo con il PID `6152`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `kill %2`             | Elimina il processo con l'**indice del job** = 2 (*vedi `jobs`*).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `jobs`                | Produce una lista numerata dei processi in background o sospesi<br>nella shell corrente — il numero tra parentesi quadre che indica ciascun processo **non è il PID** ma **un indice del job** che si usa per gestire il job,<br>premettendo il carattere `%`. **N.B.:** **Questo comando mostra solo i processi in esecuzione \| sospesi a partire dalla shell corrente.**                                                                                                                                                                                                                      |
+| `ps -ax`              | "*Process Status*": restituisce una **visione statica** dello stato di tutti i processi di tutti gli utenti (`-a`) che non necessariamente hanno controllato il terminale (`-x`).                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `top`                 | Restituisce una **visione dinamica** dello stato di tutti i processi in esecuzione, aggiornata periodicamente ad intervalli di tempo regolari.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `wait $JOBs \| $PIDs` | Attende la terminazione del comando con Job ID / PID corrispondente, restituendone il risultato. Si possono specificare un elenco di `Job` o di `PID` di processi che si vogliono aspettare. Il comando `wait` termina la sua esecuzione solo quando tutti i processi specificati terminano la loro. **Può essere chiamato solo dalla shell che ha lanciato l'esecuzione dei comandi specificati**, altrimenti termina subito restituendo come risultato `127`. Se non riceve parametri, **attende che tutti i processi figli del processo da cui viene chiamato terminino la loro esecuzione.** |
+
+> [!warning] Ricorda!
+> La variabile `$!` memorizza sempre il PID dell'ultimo processo lanciato in background. Fino allo spostamento di un nuovo processo in background, il suo valore rimane **immutato**.
+
+##### `disown` 
+
+| ARGS UTILI | ESEMPIO         | DESCRIZIONE                                               |
+| ---------- | --------------- | --------------------------------------------------------- |
+| `-r`       | `disown -r`     | Sgancia dalla shell **tutti i job running**.              |
+| `-a`       | `disown -a`     | Sgancia dalla shell **tutti i job running e sospesi**.    |
+| -          | `disown`        | Sgancia dalla shell l'**ultimo job messo in background**. |
+| `%jobid`   | `disown %jobid` | Sgancia dalla shell **il job specificato**.               |
+
+##### `nohup`
+
+Esempio:
+
+```bash
+nohup ./myscript arg1 arg2 &
+```
+
+Lancia uno script in background e lo sgancia dalla shell di partenza. Equivalente di:
+
+```bash
+./myscript.sh arg1 arg2 &
+disown
+```
 
