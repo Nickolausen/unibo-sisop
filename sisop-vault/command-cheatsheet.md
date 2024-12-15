@@ -68,10 +68,9 @@
         - [`cut`](#`cut`)
         - [`grep`](#`grep`)
         - [`sed` — **S**tream **Ed**itor](#`sed`-—-**s**tream-**ed**itor)
-      - [Gestione processi](#gestione-processi)
+    - [Gestione processi](#gestione-processi)
         - [`disown`](#`disown`)
         - [`nohup`](#`nohup`)
-
 ---
 ## Nozioni per uso del terminale: *Metacaratteri*
 
@@ -987,7 +986,7 @@ sed 's/[a-zA-Z0-9]//g
 | ---------- | ------------------------------------------------------------------------------ |
 | `-r \| -E` | Interpreta la `regular expression` come regular expression moderna (o estesa). |
 
-#### Gestione processi
+### Gestione processi
 
 | ESEMPIO               | SIGNIFICATO                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -1029,4 +1028,3 @@ Lancia uno script in background e lo sgancia dalla shell di partenza. Equivalent
 ./myscript.sh arg1 arg2 &
 disown
 ```
-
