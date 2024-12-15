@@ -72,6 +72,7 @@
         - [`disown`](#`disown`)
         - [`nohup`](#`nohup`)
 
+---
 ## Nozioni per uso del terminale: *Metacaratteri*
 
 | METACARATTERI | SIGNIFICATO                                            |
