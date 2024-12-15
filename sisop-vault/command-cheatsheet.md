@@ -18,36 +18,37 @@ debugInConsole: false # Print debug info in Obsidian console
 
 | METACARATTERI | SIGNIFICATO                                            |
 | ------------- | ------------------------------------------------------ |
-| > >> <        | redirezione I/O                                        |
-| \|            | pipe                                                   |
-| * ? [...]     | wildcards                                              |
-| 'command'     | command substitution (use **backticks**)               |
-| ;             | esecuzione **sequenziale** - **separatore di comandi** |
-| \|\| &&       | esecuzione **condizionale**                            |
-| (...)         | raggruppamento comandi                                 |
-| &             | esecuzione in **background**                           |
-| " " ' '       | quoting                                                |
-| #             | commento                                               |
-| $             | espansione di variabile                                |
-| \             | carattere di escape *                                  |
-| <<            | "here document"                                        |
+| `> >> <`      | redirezione I/O                                        |
+| `\|`          | pipe                                                   |
+| `* ? [...]`   | wildcards                                              |
+| \``command`\` | command substitution (use **backticks**)               |
+| `;`           | esecuzione **sequenziale** - **separatore di comandi** |
+| `\|\| &&`     | esecuzione **condizionale**                            |
+| `(...)`       | raggruppamento comandi                                 |
+| `&`           | esecuzione in **background**                           |
+| `" "` `' '`   | quoting                                                |
+| `#`           | commento                                               |
+| `$`           | espansione di variabile                                |
+| `\`           | carattere di escape *                                  |
+| `<<`          | "here document"                                        |
 
 ---
 ## Nozioni per uso del terminale: *Espansioni*
 
 In ordine di effettuazione
 
-| ESPANSIONE                              | ESEMPIO           |
-| --------------------------------------- | ----------------- |
-| **1) history expansion**                | !123              |
-| **2) brace expansion**                  | a{damn,czk,bubu}e |
-| **3) tilde expansion**                  | ~/nomedirectory   |
-| **4) parameter and variable expansion** | $1 $? $! ${var}   |
-| **5) arithmetic expansion**             | $(())             |
-| **6) command substitution** LTR         | $()               |
-| **7) word spitting**                    |                   |
-| **8) pathname expansion**               | * ? [...]         |
-| **9) quote removal**                    | quoting           |
+| ESPANSIONE                              | ESEMPIO                 |
+| --------------------------------------- | ----------------------- |
+| **1) history expansion**                | `!123`                  |
+| **2) brace expansion**                  | `a{damn,czk,bubu}e`     |
+| **3) tilde expansion**                  | `~/nomedirectory`       |
+| **4) parameter and variable expansion** | `$1` `$?` `$!` `${var}` |
+| **5) arithmetic expansion**             | `$(( ))`                |
+| **6) command substitution** LTR$^1$     | `$( )`                  |
+| **7) word spitting**                    |                         |
+| **8) pathname expansion**               | `* ? [...]`             |
+| **9) quote removal**                    | quoting                 |
+<small>1 — LTR: <span style="font-style:italic">Left To Right</span></small>
 
 ---
 ## Nozioni per uso del terminale: *Variabili*
@@ -60,16 +61,31 @@ In ordine di effettuazione
 | `echo $MYVAR`    | stampo il valore di `MYVAR`, quindi `PAROLA`.                                                                                 |
 | `echo $MYVARx`   | la shell non è in grado di trovare una variabile `MYVARx`, quindi stampa **stringa vuota**.                                   |
 | `echo $MYVAR x`  | la shell individua correttamente la variabile `MYVAR`, quindi visualizzerà `PAROLA x`.                                        |
-### Variabili note: PATH
+### Variabili note: `PATH`
 
 `PATH` è una variabile d'ambiente che contiene i percorsi assoluti di alcuni eseguibili utilizzati molto spesso. 
 
 >[!info]
 >Esempio di un possibile valore di path: `/bin:/sbin:/usr/bin:/usr/local/bin:/home/nickolausen`
 
+### Variabili note: `$BASHPID` e `$$`
+
+Ogni processo è identificato da un codice numerico identificativo detto **PID** (**P**rocess **ID**entifier);
+Per visualizzare il PID di un processo si fa riferimento alla variabile **`$$`**;
+
+```bash
+❯ echo $$
+2606
+```
+
+>[!warning] Eccezione di comportamento!
+> `$$` si riferisce al PID della shell padre di un processo! Se voglio vedere il PID di una sub-shell lanciata da un gruppo di comandi, devo utilizzare la variabile `$BASHPID`! 
+
+>[!warning] Attenzione alla portabilità
+>`$BASHPID` è definita solo in bash e solo per le versioni di bash > 4.0!
 ### Riferimenti indiretti a variabili
 
-Operatore **!**: 
+Operatore **`!`**: 
 - se `IDX=1`, `${!IDX} == $1`;
 - se `IDX=2`, `${!IDX} == $2`;
 - se `IDX=3`, `${!IDX} == $3`;
@@ -204,8 +220,8 @@ Le espressioni aritmetiche possono contenere:
 
 ### Valori di verità
 
-`true` = exit status 0
-`false` = exit status !0
+`true`:  "exit status di un `command`" $= 0$ 
+`false`: "exit status di un `command`" $\neq 0$ 
 
 ### Operatori logici
 
@@ -446,6 +462,23 @@ N>&M
 ```
 
 ---
+## Nozioni per uso del terminale: *Raggruppamento di comandi*
+
+Una sequenza di comandi racchiusa da una coppia di parentesi tonde viene eseguita in una sub-shell. L'exit status di quella sequenza corrisponde all'exit status dell'ultimo comando eseguito. 
+
+> [!warning] Questo accade se la sequenza è composta da **più di 1 comando**!
+> In caso contrario, non viene creata nessuna subshell. 
+
+Esempio di sequenza di comandi:
+
+```bash
+( pwd; ls -al; whoami ) > ./out.txt
+```
+
+> [!warning] 
+> Durante l'esecuzione, **`stdin`, `stdout` e `stderr` dei singoli comandi vengono concatenati.**
+
+---
 ## Cheatsheet comandi
 
 ### Generics
@@ -533,8 +566,168 @@ Nell'esempio, ridireziona qualsiasi messaggio stampato su `stdout` all'interno d
 >Qualunque sia la modalità di apertura di un file descriptor, questo deve essere chiuso con il comando:
 
 ```bash
-exec n>&- # n = identificativo del file descriptor in questione
+exec n>&- 
+# n = identificativo del file descriptor in questione
 
 # oppure, se aperto tramite variabile
 exec {MYVAR}>&-
 ```
+
+#### Manipolazione di stringhe & informazioni testuali 
+
+##### `head`
+
+Seleziona un certo numero di righe di un testo a partire dal suo **inizio**.
+
+| ARGS UTILI | ESEMPIO                          | DESCRIZIONE                                                   |
+| ---------- | -------------------------------- | ------------------------------------------------------------- |
+| `-n $NUM`  | `cat ./myfile.txt \| head -n 2`  | Indica il numero `$NUM` di righe da selezionare.              |
+| `$FILE`    | `head -n 4 $FILE`                | Indica il file `$FILE` da cui selezionare le prime `4` righe. |
+| `-c $NUM`  | `cat ./myfile.txt \| head -c 10` | Stampa i primi `$NUM` caratteri del testo da manipolare.      |
+##### `tail`
+
+Seleziona un certo numero di righe di un testo a partire dalla sua **fine**.
+
+| ARGS UTILI | ESEMPIO                            | DESCRIZIONE                                                    |
+| ---------- | ---------------------------------- | -------------------------------------------------------------- |
+| `-n $NUM`  | `cat ./myfile.txt \| tail -n 2`    | Indica il numero `$NUM` di righe da selezionare.               |
+| `$FILE`    | `tail -n 4 $FILE`                  | Indica il file `$FILE` da cui selezionare le ultime `4` righe. |
+| `-c $NUM`  | `cat ./myfile.txt \| tail -c 10`   | Stampa gli ultimi `$NUM` caratteri del testo da manipolare.    |
+| `-r`       | `cat ./myfile.txt \| tail -r -n 5` | "*Reversed*", inverte l'ordine dell'output.                    |
+
+##### `tee`
+
+Inoltra il contenuto di `stdin` su più file **contemporaneamente**.
+
+```bash
+cat ./myfile.txt | tee out1.txt out2.txt
+```
+
+*Nel seguente esempio, inoltro il messaggio `Hello, World!` sia a `stdout` che al file `greetings.txt`*
+
+```bash
+echo "Hello, World!" | tee greetings.txt
+```
+##### `cut`
+
+Seleziona solo una **porzione** del file da manipolare. 
+
+| ARGS UTILI                     | ESEMPIO                                 | DESCRIZIONE                                                                                                                                                                                                    |
+| ------------------------------ | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-b \| -c from-to,from-to,...` | `cat ./myfile.txt \| cut -c 2-10,15-20` | Indica il range di caratteri (o, equivalentemente, *bytes*) da selezionare dal testo ricevuto (*nell'esempio, seleziono i caratteri compresi tra il secondo e il decimo e tra il quindicesimo e il ventesimo*) |
+
+Esempio estratto dall'output del comando **`man cut`**:
+
+> *Extract users' login names and shells from the system passwd(5) file as “name:shell" pairs:*
+
+```bash
+cut -d : -f 1,7 /etc/passwd
+```
+
+##### `grep`
+
+Seleziona solo le righe che rispettano il criterio specificato.
+
+```bash
+cat ./dizionario.txt | grep APPLE
+```
+
+*Nell'esempio: seleziono la riga dal file `dizionario.txt` che contiene la parola `APPLE`*
+
+| ARGS UTILI | ESEMPIO                                 | DESCRIZIONE                                                                                                                          |
+| ---------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `-f $FILE` | `grep APPLE -f $DIZIONARIO`             | Indica il file da cui leggere le righe. (*Se non funziona, mettere il nome del file subito dopo l'espressione da cercare nel file.*) |
+| `-v`       | `cat ./dizionario.txt \| grep APPLE -v` | Inverte la selezione: seleziona tutte le righe che **NON** contengono la parola *APPLE*.                                             |
+| `-c`       | `cat ./dizionario.txt \| grep APPLE -c` | Mostra il **numero di righe** che rispettano il criterio specificato.                                                                |
+| `-i`       | `cat ./dizionario.txt \| grep ApPlE -i` | Effettua una ricerca **case-insensitive**.                                                                                           |
+| `-m $NUM`  | `cat ./voti.txt \| grep 18 -m 5`        | Mostra solo le prime `$NUM` righe che soddisfano il criterio specificato.                                                            |
+| `-n`       | `cat ./voti.txt \| grep 18 -n`          | Precede ogni riga selezionata con il corrispondente numero di riga nel file.                                                         |
+##### `sed` — **S**tream **Ed**itor
+
+Modifica un testo sulla base di una `regular expression` specificata.
+
+Sintassi tipo:
+
+```bash
+sed 's/DA_TOGLIERE/DA_METTERE/[g | numero]'
+```
+
+Dove:
+* `s` indica l'operazione di **sostituzione** di porzioni di testo;
+* `DA_TOGLIERE` corrisponde alla **porzione di testo da rimuovere**;
+* `DA_METTERE` corrisponde alla porzione di testo da inserire al posto di `DA_TOGLIERE`;
+* `g` — *opzionale*: indica che la sostituzione va effettuata su tutto il testo su cui `sed` sta lavorando ("*global*") (altrimenti fatta solo sulla prima occorrenza di `DA_TOGLIERE` in ciascuna riga);
+	* `numero` — *opzionale*: indica per quante occorrenze di `DA_TOGLIERE`deve essere fatta la sostituzione.
+
+Alcuni utilizzi di `sed`:
+
+1. Sostituisce **la prima occorrenza** di togli con metti in ciascuna riga del file `nomefile`.
+
+```bash
+sed 's/togli/metti/' nomefile
+```
+
+2. Rimuovere il carattere in **prima posizione di ogni linea** che si riceve da `stdin`.
+
+```bash
+sed 's/^.//'
+```
+
+* `^`*: inizio linea*
+* `.`*: carattere qualunque*
+
+3. Rimuovere **l’ultimo carattere** di ogni linea ricevuta dallo `stdin`.
+
+```bash
+sed 's/.$//'
+```
+
+- `.`*: carattere qualunque*
+- `$`*: fine linea*
+
+4. Eseguo **due rimozioni insieme** (;) — rimuovere il primo e l’ultimo carattere in ogni linea.
+
+```bash
+sed 's/^.//;s/.$//'
+```
+
+5. Rimuove i primi 3 caratteri ad inizio linea
+
+```bash
+sed 's/...//
+```
+
+6. Rimuove i primi 4 caratteri ad inizio linea.
+
+```bash
+sed -r 's/.{4}//'
+```
+
+7. Rimuove gli ultimi 3 caratteri di ogni linea.
+
+```bash
+sed -r 's/.{3}$//‘
+```
+
+8. Rimuove tutto eccetto i primi 3 caratteri di ogni linea.
+
+```bash 
+sed -r 's/(.{3}).*/\1/'
+```
+
+9. Rimuove tutto eccetto gli ultimi 3 caratteri di ogni linea.
+
+```bash 
+sed -r 's/.*(.{3})/\1/'
+```
+
+10. Rimuove tutti i caratteri alfanumerici in una linea.
+
+```bash
+sed 's/[a-zA-Z0-9]//g
+```
+
+| ARGS UTILI | DESCRIZIONE                                                                    |
+| ---------- | ------------------------------------------------------------------------------ |
+| `-r \| -E` | Interpreta la `regular expression` come regular expression moderna (o estesa). |
+
