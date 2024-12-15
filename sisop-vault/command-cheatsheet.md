@@ -3,6 +3,17 @@
 > * ✍🏼 **Nicholas Magi**, `nicholas.magi@studio.unibo.it`
 > * Corso di **Sistemi Operativi** @ CdL in Ingegneria e Scienze Informatiche, Università di Bologna — Campus di Cesena.
 > * Riassunto e schematizzazione delle dispense del prof. **Vittorio Ghini**.
+
+```table-of-contents
+title: Indice dei contenuti 
+style: nestedOrderedList # TOC style (nestedList|nestedOrderedList|inlineFirstLevel)
+minLevel: 0 # Include headings from the specified level
+maxLevel: 0 # Include headings up to the specified level
+includeLinks: true # Make headings clickable
+hideWhenEmpty: false # Hide TOC if no headings are found
+debugInConsole: false # Print debug info in Obsidian console
+```
+
 ## Nozioni per uso del terminale: *Metacaratteri*
 
 | METACARATTERI | SIGNIFICATO                                            |
@@ -125,7 +136,7 @@ Dove:
 * `?` -> sostituito con un **qualunque carattere**;
 * `[`*`elenco`*`]` -> sostituito con un qualunque carattere specificato in *elenco*;
 
-### \[*elenco*]
+### Wildcard *elenco*
 
 | WILDCARD      | SOSTITUZIONE                                                                  |
 | ------------- | ----------------------------------------------------------------------------- |
@@ -133,7 +144,7 @@ Dove:
 | `[[:upper:]]` | un solo carattere **MAIUSCOLO**                                               |
 | `[[:lower:]]` | un solo carattere **minuscolo**                                               |
 | `[c-f]`       | un solo carattere compreso tra 'c' ed 'f'; *in questo caso, {c, d, e, f}*     |
-| `[1-7]`        | un solo carattere compreso tra 1 e 7; *in questo caso, {1, 2, 3, 4, 5, 6, 7}* |
+| `[1-7]`       | un solo carattere compreso tra 1 e 7; *in questo caso, {1, 2, 3, 4, 5, 6, 7}* |
 | `[abk]`       | un solo carattere tra 'a', 'b' o 'k'                                          |
 
 ---
