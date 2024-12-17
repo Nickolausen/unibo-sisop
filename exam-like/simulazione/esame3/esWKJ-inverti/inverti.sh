@@ -1,5 +1,8 @@
 #!/bin/bash
 
-MYFILE=$1
-NUM_LINES=$(cat $MYFILE | wc -l)
-cat $MYFILE | tail -n $NUM_LINES 
+OUT=""
+while read LINE ; do
+	OUT="${LINE}\n${OUT}"
+done < $1
+
+echo -e ${OUT/%\\n/""}

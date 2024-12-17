@@ -1,4 +1,6 @@
 #!/bin/bash
 
-export OUT=""
-.
+if read ROW ; then
+	./inverti2-logic.sh
+	echo $ROW
+fi

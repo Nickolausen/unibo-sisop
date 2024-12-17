@@ -5,10 +5,4 @@ if (( $# != 1 )) ; then
 	exit 1
 fi 
 
-read ROW < $1
-if [[ $? == 0 ]] ; then
-	./inverti2.sh $1
-	OUT="${ROW}{$OUT}"
-else
-	echo $OUT
-fi
+./inverti2-logic.sh < $1
