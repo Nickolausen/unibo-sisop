@@ -11,5 +11,9 @@ for MOST_RECENT in $FILES ; do
 done
 
 for FILE in $FILES ; do
-	if (( $FILE ))
+	if [[ $MOST_RECENT -ot $FILE ]] ; then
+		MOST_RECENT=$FILE
+	fi
 done
+
+echo $MOST_RECENT
