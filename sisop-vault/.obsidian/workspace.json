@@ -11,13 +11,11 @@
             "id": "4af48dd113e47923",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "pdf",
               "state": {
-                "file": "command-cheatsheet.md",
-                "mode": "source",
-                "source": false
+                "file": "command-cheatsheet.pdf"
               },
-              "icon": "lucide-file",
+              "icon": "lucide-file-text",
               "title": "command-cheatsheet"
             }
           }
@@ -164,8 +162,8 @@
   },
   "active": "4af48dd113e47923",
   "lastOpenFiles": [
+    "command-cheatsheet.md",
     "command-cheatsheet.pdf",
-    "Welcome.md",
-    "command-cheatsheet.md"
+    "Welcome.md"
   ]
 }
