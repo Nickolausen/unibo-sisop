@@ -1,5 +1,4 @@
 #!/bin/bash
-# TODO: da finire
 
 if (( $# != 1 )) ; then
 	echo "Insuff. args! $#" 1>&2
