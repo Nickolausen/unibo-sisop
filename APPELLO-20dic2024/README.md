@@ -2,7 +2,7 @@
 
 ## Consegne
 
-## [Ex 261] Tenta
+### [Ex 261] Tenta
 Scrivere uno script `lettera.sh` che genera ad ogni invocazione
 una lettera a caso tra queste due `a` `c`
 e la stampa in output SENZA ANDARE A CAPO.
@@ -26,7 +26,7 @@ la parola "cacc" ed il numero di volte che ho
 dovuto generare parole fino a trovare 
 quella giusta, poi termina. 
 
-## [Ex 262] Sposta
+### [Ex 262] Sposta
 Scrivere uno script `sposta.sh` che prende come parametro di input il nome di un file.
 
 Lo script deve creare una copia di quel file, aggiungere l'estensione `.copy` e spostare la prima riga del file sorgente come ultima riga del file `.copy`
