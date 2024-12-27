@@ -1,4 +1,4 @@
-# Appello 20 dicembre 2024
+# 1° Appello - sessione INVERNALE - 20 dicembre 2024
 
 ## Consegne
 
