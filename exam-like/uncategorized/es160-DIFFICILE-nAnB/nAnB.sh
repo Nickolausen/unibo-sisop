@@ -12,8 +12,8 @@ if [[ ${CHAR_REMAINING} !=  "" ]]; then
 	exit 0
 fi
 
-NR_A=$(echo $ORIGINAL_STRING | sed 's/[A]//g' | wc -c)
-NR_B=$(echo $ORIGINAL_STRING | sed 's/[B]//g' | wc -c)
+NR_B=$(echo $ORIGINAL_STRING | sed 's/[A]//g' | wc -c)
+NR_A=$(echo $ORIGINAL_STRING | sed 's/[B]//g' | wc -c)
 
 if [[ $NR_A -eq $NR_B ]]; then
 	echo "vero"
