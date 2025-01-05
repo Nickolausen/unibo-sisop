@@ -10,7 +10,7 @@ if [ ! -f $1 ] ; then
 	exit 1
 fi
 
-LINES=$(wc -l $1 | cut -d " " -f 1)
+LINES=$(wc -l | cut -d " " -f 1)
 
 cat $1 | tail -n $(( $LINES-1 )) > "$1.copy"
 cat $1 | head -n 1 >> "$1.copy"
